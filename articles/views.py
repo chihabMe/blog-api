@@ -19,6 +19,8 @@ class ArticleView(generics.RetrieveUpdateDestroyAPIView) :
     permission_classes = [IsAuthorOrIsSuperUserOrReadOnly]
 
 
+
+
         
 
 

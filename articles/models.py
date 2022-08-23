@@ -1,8 +1,12 @@
+import re
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from taggit.managers import TaggableManager
 from django.utils.text import slugify
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from random import randint
 
 # Create your models here.
 User = get_user_model()
@@ -12,7 +16,7 @@ class ArticleManager(models.Manager):
 
 class Article(models.Model):
     title = models.CharField(max_length=300)
-    slug= models.SlugField(max_length=350,null=True,blank=True)
+    slug= models.SlugField(max_length=350,null=True,blank=True,unique=True)
     body = models.TextField()
     author = models.ForeignKey(User,related_name='articles',on_delete=models.CASCADE)
 
@@ -25,9 +29,15 @@ class Article(models.Model):
     objects= models.Manager()
     publishes = ArticleManager()
 
-    def save(self,*args,**kwargs):
-        self.slug = slugify(self.title)
-        super(Article,self).save(*args,**kwargs)
 
     def __str__(self) -> str:
         return self.title
+
+@receiver(pre_save, sender=Article)
+def pre_save_article(sender,instance,*args,**kwargs):
+    count = Article.objects.filter(title=instance.title).count()
+    if count!=0:
+        instance.slug= slugify(instance.title)+"-"+str(count+1)
+    
+
+    
