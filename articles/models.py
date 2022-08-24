@@ -14,11 +14,18 @@ class ArticleManager(models.Manager):
     def get_queryset(self)  :
         return super().get_queryset().filter(publish=True)
 
+def namer(instance,filename):
+    name =  instance.author.username+"/"+"blog_"+str(instance.id)+"/"+filename
+    print(name)
+    return name
+
 class Article(models.Model):
     title = models.CharField(max_length=300)
     slug= models.SlugField(max_length=350,null=True,blank=True,unique=True)
     body = models.TextField()
+    introduction  = models.TextField(max_length=400)
     author = models.ForeignKey(User,related_name='articles',on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=namer,null=False,blank=False)
 
     publish = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -30,6 +37,8 @@ class Article(models.Model):
     publishes = ArticleManager()
 
 
+    class Meta:
+        ordering=("-created",)
     def __str__(self) -> str:
         return self.title
 
