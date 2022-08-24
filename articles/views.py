@@ -4,14 +4,15 @@ from rest_framework.pagination import PageNumberPagination
 from .models import Article
 from .serializers import ArticleSerializer
 from .permissions import IsAuthorOrIsSuperUserOrReadOnly
+
 # Create your views here.
 
 class ArticleListView(generics.ListCreateAPIView):
     queryset = Article.publishes.all()
     serializer_class = ArticleSerializer
     pagination_class=PageNumberPagination
-    
-class ArticleView(generics.RetrieveUpdateDestroyAPIView) :
+    permission_classes = [IsAuthorOrIsSuperUserOrReadOnly]
+class ArticleView(generics.RetrieveAPIView) :
     queryset = Article.publishes.all()
     lookup_field='slug'
     serializer_class = ArticleSerializer

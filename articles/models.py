@@ -16,7 +16,6 @@ class ArticleManager(models.Manager):
 
 def namer(instance,filename):
     name =  instance.author.username+"/"+"blog_"+str(instance.id)+"/"+filename
-    print(name)
     return name
 
 class Article(models.Model):

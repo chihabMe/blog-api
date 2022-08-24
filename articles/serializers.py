@@ -9,7 +9,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields  = ("title","author","body","created","updated","slug",'recommendations','image')
+        fields  = ("title","author","body","created","updated","slug",'recommendations','image','introduction')
     def get_author(self,article):
         return article.author.username
 
