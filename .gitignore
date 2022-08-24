@@ -2,6 +2,8 @@
 ./statiffiles
 media/*
 statiffiles/*
+media 
+statiffiles
 # Django #
 *.log
 *.pot
